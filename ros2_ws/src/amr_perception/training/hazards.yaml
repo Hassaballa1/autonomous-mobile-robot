@@ -1,0 +1,11 @@
+# Dataset definition for the stairs / drop-off detector (Ultralytics YOLO format).
+# Put images and labels under datasets/hazards/{images,labels}/{train,val}.
+# Public stair datasets on Roboflow Universe export directly to this layout;
+# add your own photos from the robot camera so the model sees its real viewpoint.
+path: datasets/hazards
+train: images/train
+val: images/val
+
+names:
+  0: stairs
+  1: drop

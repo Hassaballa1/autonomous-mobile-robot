@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>amr_perception</name>
+  <version>1.0.0</version>
+  <description>On-device YOLOv8 detection of stairs and hazards, and a velocity gate that stops the robot driving towards them.</description>
+  <maintainer email="eslam22habashy@gmail.com">Eslam Habashy</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>vision_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <!-- ultralytics is installed with pip: see requirements.txt -->
+
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

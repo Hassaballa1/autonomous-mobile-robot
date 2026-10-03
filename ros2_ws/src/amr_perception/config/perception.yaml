@@ -1,0 +1,18 @@
+yolo_detector:
+  ros__parameters:
+    # Custom stairs/drop model trained with training/train_hazards.py.
+    # The stock COCO yolov8n.pt also works but has no stairs class.
+    model: yolov8n.pt
+    confidence: 0.4
+    image_size: 320          # small input keeps Pi 4/5 CPU inference at a few FPS
+    device: cpu
+    max_rate_hz: 5.0
+    publish_annotated: true
+
+hazard_guard:
+  ros__parameters:
+    hazard_classes: [stairs, drop]
+    min_score: 0.5
+    image_height: 480        # must match the camera resolution
+    near_fraction: 0.55      # box bottom below 55 % of the image height counts as close
+    hold_time: 1.5           # s to keep blocking after the last sighting
