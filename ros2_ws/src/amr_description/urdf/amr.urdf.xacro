@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!-- AMR: 80 x 45 cm aluminium tube frame, two wiper-motor drive wheels on the centre axle,
+     four swivel casters at the corners, RPLidar in the exact centre, forward camera, top deck.
+     Dimensions match amr_sim/worlds/amr_world.sdf and amr_base/config/base.yaml. -->
+<robot name="amr" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Measured -->
+  <xacro:property name="chassis_x" value="0.80"/>
+  <xacro:property name="chassis_y" value="0.45"/>
+  <xacro:property name="wheel_radius" value="0.075"/>
+  <xacro:property name="wheel_separation" value="0.30"/>
+  <!-- Estimated from photos: re-measure and adjust -->
+  <xacro:property name="chassis_z" value="0.05"/>        <!-- frame tube height -->
+  <xacro:property name="wheel_width" value="0.04"/>
+  <xacro:property name="caster_x" value="0.35"/>         <!-- caster centres from robot centre -->
+  <xacro:property name="caster_y" value="0.18"/>
+  <xacro:property name="deck_height" value="0.17"/>      <!-- top deck above base_link -->
+  <xacro:property name="lidar_height" value="0.10"/>     <!-- scan plane above base_link: clears the tyre tops -->
+
+  <material name="frame"><color rgba="0.12 0.12 0.12 1"/></material>
+  <material name="deck"><color rgba="0.2 0.2 0.22 1"/></material>
+  <material name="rubber"><color rgba="0.05 0.05 0.05 1"/></material>
+  <material name="orange"><color rgba="0.95 0.45 0.1 1"/></material>
+  <material name="lidar"><color rgba="0.15 0.15 0.15 1"/></material>
+
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12}" ixy="0" ixz="0"
+               iyy="${m*(x*x+z*z)/12}" iyz="0" izz="${m*(x*x+y*y)/12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- base_link: centre of the frame, on the drive axle, one wheel radius above the floor -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="${chassis_x} ${chassis_y} ${chassis_z}"/></geometry>
+      <material name="frame"/>
+    </visual>
+    <collision>
+      <geometry><box size="${chassis_x} ${chassis_y} ${chassis_z}"/></geometry>
+    </collision>
+    <xacro:box_inertia m="8.0" x="${chassis_x}" y="${chassis_y}" z="${chassis_z}"/>
+  </link>
+
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0 0 ${-wheel_radius}"/>
+  </joint>
+
+  <link name="deck">
+    <visual>
+      <geometry><box size="${chassis_x} ${chassis_y + 0.05} 0.01"/></geometry>
+      <material name="deck"/>
+    </visual>
+  </link>
+  <joint name="deck_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="deck"/>
+    <origin xyz="0 0 ${deck_height}"/>
+  </joint>
+
+  <xacro:macro name="wheel" params="side y">
+    <link name="${side}_wheel">
+      <visual>
+        <origin rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="rubber"/>
+      </visual>
+      <collision>
+        <origin rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <xacro:box_inertia m="0.5" x="${2*wheel_radius}" y="${wheel_width}" z="${2*wheel_radius}"/>
+    </link>
+    <joint name="${side}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${side}_wheel"/>
+      <origin xyz="0 ${y} 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel side="left" y="${wheel_separation/2}"/>
+  <xacro:wheel side="right" y="${-wheel_separation/2}"/>
+
+  <!-- Swivel casters, modelled as spheres touching the floor -->
+  <xacro:macro name="caster" params="name x y">
+    <link name="${name}_caster">
+      <visual>
+        <geometry><sphere radius="${wheel_radius/2}"/></geometry>
+        <material name="orange"/>
+      </visual>
+      <collision>
+        <geometry><sphere radius="${wheel_radius/2}"/></geometry>
+      </collision>
+    </link>
+    <joint name="${name}_caster_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}_caster"/>
+      <origin xyz="${x} ${y} ${-wheel_radius/2}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:caster name="front_left" x="${caster_x}" y="${caster_y}"/>
+  <xacro:caster name="front_right" x="${caster_x}" y="${-caster_y}"/>
+  <xacro:caster name="rear_left" x="${-caster_x}" y="${caster_y}"/>
+  <xacro:caster name="rear_right" x="${-caster_x}" y="${-caster_y}"/>
+
+  <!-- RPLidar A1 in the exact centre of the robot -->
+  <link name="lidar_link">
+    <visual>
+      <geometry><cylinder radius="0.035" length="0.04"/></geometry>
+      <material name="lidar"/>
+    </visual>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 ${lidar_height}"/>
+  </joint>
+
+  <!-- Forward camera on the front cross-member, tilted down ~20° to see floor edges and stairs -->
+  <link name="camera_link">
+    <visual>
+      <geometry><box size="0.02 0.06 0.03"/></geometry>
+      <material name="rubber"/>
+    </visual>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="${chassis_x/2} 0 0.05" rpy="0 0.35 0"/>
+  </joint>
+
+  <!-- Optical frame (z forward, x right) for image consumers -->
+  <link name="camera_optical_frame"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_frame"/>
+    <origin rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
+
+</robot>

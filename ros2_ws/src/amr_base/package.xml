@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>amr_base</name>
+  <version>1.0.0</version>
+  <description>Serial driver for the AMR motor controller: cmd_vel to wheel speeds, encoder ticks to odometry and TF, battery telemetry.</description>
+  <maintainer email="eslam22habashy@gmail.com">Eslam Habashy</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>python3-serial</exec_depend>
+
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

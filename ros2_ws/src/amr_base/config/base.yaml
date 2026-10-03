@@ -1,0 +1,13 @@
+# Must match the physical robot and firmware/include/config.h
+base_driver:
+  ros__parameters:
+    port: /dev/amr_base          # udev symlink to the Arduino Nano, see raspberry_pi/99-amr.rules
+    baud: 115200
+    wheel_radius: 0.075          # m, 15 cm wheels
+    wheel_separation: 0.30       # m, centre of left tyre to centre of right tyre
+    ticks_per_rev: 1200          # must equal TICKS_PER_REV in the firmware (it warns on mismatch)
+    max_wheel_speed: 6.0         # rad/s, about 0.45 m/s: 24 V wiper motors run near 60 rpm
+    cmd_vel_timeout: 0.5         # s
+    publish_tf: true
+    odom_frame: odom
+    base_frame: base_link
