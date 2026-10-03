@@ -141,27 +141,27 @@
       </link>
     </model>
 
-    <!-- The robot: 80 x 45 cm frame, 15 cm drive wheels (30 cm apart) 20 cm from the rear,
-         two front casters, lidar in the centre of the frame. base_link is the drive-axle midpoint.
+    <!-- The robot: 80 x 45 cm frame, 15 cm drive wheels (30 cm apart) 20 cm behind the front,
+         two rear casters, lidar in the centre of the frame. base_link is the drive-axle midpoint.
          Matches amr_description/urdf/amr.urdf.xacro. -->
     <model name="amr">
-      <!-- base_link sits on the drive axle, one wheel radius above the floor; the frame centre is 0.2 m ahead of it -->
+      <!-- base_link sits on the drive axle, one wheel radius above the floor; the frame centre is 0.2 m behind it -->
       <pose>0 0 0.075 0 0 0</pose>
 
       <link name="base_link">
         <inertial>
-          <pose>0.2 0 0 0 0 0</pose>
+          <pose>-0.2 0 0 0 0 0</pose>
           <mass>8.0</mass>
           <inertia><ixx>0.137</ixx><iyy>0.428</iyy><izz>0.562</izz></inertia>
         </inertial>
-        <collision name="c"><pose>0.2 0 0 0 0 0</pose><geometry><box><size>0.8 0.45 0.05</size></box></geometry></collision>
-        <visual name="v"><pose>0.2 0 0 0 0 0</pose><geometry><box><size>0.8 0.45 0.05</size></box></geometry>
+        <collision name="c"><pose>-0.2 0 0 0 0 0</pose><geometry><box><size>0.8 0.45 0.05</size></box></geometry></collision>
+        <visual name="v"><pose>-0.2 0 0 0 0 0</pose><geometry><box><size>0.8 0.45 0.05</size></box></geometry>
           <material><ambient>0.12 0.12 0.12 1</ambient><diffuse>0.12 0.12 0.12 1</diffuse></material></visual>
-        <visual name="deck"><pose>0.2 0 0.17 0 0 0</pose><geometry><box><size>0.8 0.5 0.01</size></box></geometry>
+        <visual name="deck"><pose>-0.2 0 0.17 0 0 0</pose><geometry><box><size>0.8 0.5 0.01</size></box></geometry>
           <material><ambient>0.2 0.2 0.22 1</ambient><diffuse>0.2 0.2 0.22 1</diffuse></material></visual>
         <!-- Forward-facing camera for the YOLOv8 hazard detector -->
         <sensor name="camera" type="camera">
-          <pose>0.6 0 0.17 0 0.12 0</pose>
+          <pose>0.2 0 0.17 0 0.12 0</pose>
           <topic>camera/image_raw</topic>
           <gz_frame_id>camera_link</gz_frame_id>
           <update_rate>15</update_rate>
@@ -197,8 +197,8 @@
         <axis><xyz>0 0 1</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
       </joint>
 
-      <link name="front_left_caster">
-        <pose>0.55 0.18 -0.0375 0 0 0</pose>
+      <link name="rear_left_caster">
+        <pose>-0.55 0.18 -0.0375 0 0 0</pose>
         <inertial><mass>0.1</mass><inertia><ixx>0.00006</ixx><iyy>0.00006</iyy><izz>0.00006</izz></inertia></inertial>
         <collision name="c">
           <geometry><sphere><radius>0.0375</radius></sphere></geometry>
@@ -207,9 +207,9 @@
         <visual name="v"><geometry><sphere><radius>0.0375</radius></sphere></geometry>
           <material><ambient>0.95 0.45 0.1 1</ambient><diffuse>0.95 0.45 0.1 1</diffuse></material></visual>
       </link>
-      <joint name="front_left_caster_joint" type="fixed"><parent>base_link</parent><child>front_left_caster</child></joint>
-      <link name="front_right_caster">
-        <pose>0.55 -0.18 -0.0375 0 0 0</pose>
+      <joint name="rear_left_caster_joint" type="fixed"><parent>base_link</parent><child>rear_left_caster</child></joint>
+      <link name="rear_right_caster">
+        <pose>-0.55 -0.18 -0.0375 0 0 0</pose>
         <inertial><mass>0.1</mass><inertia><ixx>0.00006</ixx><iyy>0.00006</iyy><izz>0.00006</izz></inertia></inertial>
         <collision name="c">
           <geometry><sphere><radius>0.0375</radius></sphere></geometry>
@@ -218,10 +218,10 @@
         <visual name="v"><geometry><sphere><radius>0.0375</radius></sphere></geometry>
           <material><ambient>0.95 0.45 0.1 1</ambient><diffuse>0.95 0.45 0.1 1</diffuse></material></visual>
       </link>
-      <joint name="front_right_caster_joint" type="fixed"><parent>base_link</parent><child>front_right_caster</child></joint>
+      <joint name="rear_right_caster_joint" type="fixed"><parent>base_link</parent><child>rear_right_caster</child></joint>
 
       <link name="lidar_link">
-        <pose>0.2 0 0.10 0 0 0</pose>
+        <pose>-0.2 0 0.10 0 0 0</pose>
         <inertial>
           <mass>0.2</mass>
           <inertia><ixx>0.0001</ixx><iyy>0.0001</iyy><izz>0.0001</izz></inertia>
@@ -257,6 +257,12 @@
         </sensor>
       </link>
       <joint name="lidar_joint" type="fixed"><parent>base_link</parent><child>lidar_link</child></joint>
+
+      <!-- Wheel angles for robot_state_publisher, bridged to /joint_states -->
+      <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+        <joint_name>left_wheel_joint</joint_name>
+        <joint_name>right_wheel_joint</joint_name>
+      </plugin>
 
       <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
         <left_joint>left_wheel_joint</left_joint>

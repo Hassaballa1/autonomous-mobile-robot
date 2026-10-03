@@ -36,7 +36,8 @@ sudo apt-get install -y \
   python3-colcon-common-extensions \
   python3-pip
 
-echo "==> YOLOv8 (Ultralytics) for the system Python that ROS uses"
+echo "==> YOLOv8 (Ultralytics, CPU-only PyTorch) for the system Python that ROS uses"
+pip3 install --break-system-packages --index-url https://download.pytorch.org/whl/cpu torch torchvision
 pip3 install --break-system-packages -r "$WS/src/amr_perception/requirements.txt"
 
 echo "==> Serial and camera access"

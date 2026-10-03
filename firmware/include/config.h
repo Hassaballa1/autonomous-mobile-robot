@@ -33,7 +33,7 @@
 
 // ---------------------------------------------------------------- power
 // 24 V Li-ion pack (6S: 25.2 V full, 22.2 V nominal) through a 100k / 15k divider into A0.
-// Replace the ratio with (R1 + R2) / R2 from your measured resistor values.
+// Ratio = (R1 + R2) / R2 = (100k + 15k) / 15k; keeps a full 29.4 V (7S) pack under 5 V.
 #define BATTERY_DIVIDER_RATIO 7.67f
 #define BATTERY_LOW_VOLTS 19.8f     // 3.3 V per cell for 6S; use 23.1 for a 7S pack
 #define ADC_MAX 1023.0f

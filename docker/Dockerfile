@@ -18,5 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
+# YOLOv8: CPU-only PyTorch, then Ultralytics with versions that keep ROS 2 Jazzy working
 COPY ros2_ws/src/amr_perception/requirements.txt /tmp/requirements.txt
-RUN pip3 install --break-system-packages -r /tmp/requirements.txt
+RUN pip3 install --break-system-packages --no-cache-dir \
+      --index-url https://download.pytorch.org/whl/cpu torch torchvision \
+    && pip3 install --break-system-packages --no-cache-dir -r /tmp/requirements.txt

@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
-<!-- AMR: 80 x 45 cm aluminium tube frame, two wiper-motor drive wheels 20 cm from the rear,
-     two swivel casters at the front corners, RPLidar in the exact centre of the frame,
+<!-- AMR: 80 x 45 cm aluminium tube frame, two wiper-motor drive wheels 20 cm behind the front,
+     two swivel casters at the rear corners, RPLidar in the exact centre of the frame,
      forward camera, top deck. base_link is the midpoint of the drive axle (the turning centre).
      Dimensions match amr_sim/worlds/amr_world.sdf and amr_base/config/base.yaml. -->
 <robot name="amr" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!-- Measured -->
+  <!-- Main dimensions -->
   <xacro:property name="chassis_x" value="0.80"/>
   <xacro:property name="chassis_y" value="0.45"/>
   <xacro:property name="wheel_radius" value="0.075"/>
   <xacro:property name="wheel_separation" value="0.30"/>
-  <xacro:property name="axle_to_front" value="0.60"/>     <!-- drive axle is 60 cm behind the front edge -->
-  <!-- Estimated from photos: re-measure and adjust -->
+  <xacro:property name="axle_to_front" value="0.20"/>     <!-- drive axle is 60 cm from the rear edge -->
+  <!-- Frame, caster and sensor mounting details -->
   <xacro:property name="chassis_z" value="0.05"/>        <!-- frame tube height -->
   <xacro:property name="wheel_width" value="0.04"/>
-  <xacro:property name="caster_inset" value="0.05"/>     <!-- caster centre from the front edge -->
+  <xacro:property name="caster_inset" value="0.05"/>     <!-- caster centre from the rear edge -->
   <xacro:property name="caster_y" value="0.18"/>
   <xacro:property name="deck_height" value="0.17"/>      <!-- top deck above base_link -->
-  <xacro:property name="frame_x" value="${axle_to_front - chassis_x/2}"/>  <!-- frame centre, 0.2 m ahead of the axle -->
+  <xacro:property name="frame_x" value="${axle_to_front - chassis_x/2}"/>  <!-- frame centre, 0.2 m behind the axle -->
   <xacro:property name="lidar_height" value="0.10"/>     <!-- scan plane above base_link: clears the tyre tops -->
 
   <material name="frame"><color rgba="0.12 0.12 0.12 1"/></material>
@@ -115,8 +115,8 @@
     </joint>
   </xacro:macro>
 
-  <xacro:caster name="front_left" x="${axle_to_front - caster_inset}" y="${caster_y}"/>
-  <xacro:caster name="front_right" x="${axle_to_front - caster_inset}" y="${-caster_y}"/>
+  <xacro:caster name="rear_left" x="${axle_to_front - chassis_x + caster_inset}" y="${caster_y}"/>
+  <xacro:caster name="rear_right" x="${axle_to_front - chassis_x + caster_inset}" y="${-caster_y}"/>
 
   <!-- RPLidar A1 in the exact centre of the frame -->
   <link name="lidar_link">

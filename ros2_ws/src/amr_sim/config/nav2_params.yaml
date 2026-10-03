@@ -197,7 +197,7 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.05
-      footprint: "[[0.62, 0.25], [0.62, -0.25], [-0.22, -0.25], [-0.22, 0.25]]"  # 80 x 45 cm frame + 2 cm margin, axle 20 cm from the rear
+      footprint: "[[0.22, 0.25], [0.22, -0.25], [-0.62, -0.25], [-0.62, 0.25]]"  # 80 x 45 cm frame + 2 cm margin, axle 20 cm behind the front
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -235,7 +235,7 @@ global_costmap:
       publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_link
-      footprint: "[[0.62, 0.25], [0.62, -0.25], [-0.22, -0.25], [-0.22, 0.25]]"  # 80 x 45 cm frame + 2 cm margin, axle 20 cm from the rear
+      footprint: "[[0.22, 0.25], [0.22, -0.25], [-0.62, -0.25], [-0.62, 0.25]]"  # 80 x 45 cm frame + 2 cm margin, axle 20 cm behind the front
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]

@@ -18,6 +18,7 @@
   <exec_depend>nav2_bringup</exec_depend>
   <exec_depend>nav2_simple_commander</exec_depend>
   <exec_depend>amr_perception</exec_depend>
+  <exec_depend>amr_description</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

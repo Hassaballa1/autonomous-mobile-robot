@@ -17,6 +17,8 @@ def generate_launch_description():
     rviz_config = LaunchConfiguration('rviz_config')
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config', default_value=os.path.join(pkg, 'rviz', 'amr_sim.rviz'))
+    teleop_arg = DeclareLaunchArgument(
+        'teleop', default_value='true', description='Open a keyboard teleop window')
     perception = LaunchConfiguration('perception')
     perception_arg = DeclareLaunchArgument(
         'perception', default_value='false',
@@ -39,9 +41,11 @@ def generate_launch_description():
             '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',
             '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
             '/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/world/amr_world/model/amr/joint_state@sensor_msgs/msg/JointState[gz.msgs.Model',
         ],
         # The wheels only obey commands that have passed the hazard guard, as on the real robot
-        remappings=[('/cmd_vel', '/cmd_vel_safe')],
+        remappings=[('/cmd_vel', '/cmd_vel_safe'),
+                    ('/world/amr_world/model/amr/joint_state', '/joint_states')],
         parameters=[{'use_sim_time': True}],
         output='screen',
     )
@@ -64,21 +68,11 @@ def generate_launch_description():
         output='screen',
     )
 
-    # Lidar mount position relative to the chassis (matches amr_world.sdf)
-    lidar_tf = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=['--x', '0.2', '--z', '0.10',
-                   '--frame-id', 'base_link', '--child-frame-id', 'lidar_link'],
-        parameters=[{'use_sim_time': True}],
-    )
-
-    camera_tf = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=['--x', '0.6', '--z', '0.17', '--pitch', '0.12',
-                   '--frame-id', 'base_link', '--child-frame-id', 'camera_link'],
-        parameters=[{'use_sim_time': True}],
+    # Same URDF as the real robot: fixed sensor frames plus wheel joints from Gazebo
+    description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(
+            get_package_share_directory('amr_description'), 'launch', 'description.launch.py')),
+        launch_arguments={'use_sim_time': 'true'}.items(),
     )
 
     rviz = Node(
@@ -93,11 +87,12 @@ def generate_launch_description():
         package='teleop_twist_keyboard',
         executable='teleop_twist_keyboard',
         prefix='xterm -title "Keyboard control" -geometry 70x20 -fa Monospace -fs 11 -e',
-        parameters=[{'speed': 0.5, 'turn': 1.0}],
+        parameters=[{'speed': 0.3, 'turn': 0.8}],
+        condition=IfCondition(LaunchConfiguration('teleop')),
         output='screen',
     )
 
     return LaunchDescription([
-        rviz_config_arg, perception_arg, gazebo, bridge, guard, detector,
-        lidar_tf, camera_tf, rviz, teleop,
+        rviz_config_arg, teleop_arg, perception_arg, gazebo, bridge, guard, detector,
+        description, rviz, teleop,
     ])

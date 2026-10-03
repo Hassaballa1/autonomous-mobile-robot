@@ -10,11 +10,11 @@ def generate_launch_description():
     pkg = get_package_share_directory('amr_sim')
     nav2_bringup = get_package_share_directory('nav2_bringup')
 
-    # Sim + keyboard control, with Nav2's RViz view (map, costmaps, goal and waypoint tools)
+    # Sim + keyboard control, with an RViz view of the map, costmaps, plan and goal tool
     sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg, 'launch', 'sim.launch.py')),
         launch_arguments={
-            'rviz_config': os.path.join(nav2_bringup, 'rviz', 'nav2_default_view.rviz'),
+            'rviz_config': os.path.join(pkg, 'rviz', 'nav.rviz'),
         }.items(),
     )
 

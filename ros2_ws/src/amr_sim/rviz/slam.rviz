@@ -19,11 +19,19 @@ Visualization Manager:
       Cell Size: 1
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Enabled: true
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+        Durability Policy: Transient Local
+      Visual Enabled: true
     - Class: rviz_default_plugins/TF
       Name: TF
       Enabled: true
       Marker Scale: 0.5
-      Show Names: true
+      Show Names: false
     - Class: rviz_default_plugins/LaserScan
       Name: LaserScan
       Enabled: true

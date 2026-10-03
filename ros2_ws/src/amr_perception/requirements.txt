@@ -1,5 +1,9 @@
+# Install the CPU-only PyTorch build first (no CUDA libraries on a Raspberry Pi):
+#   pip3 install --index-url https://download.pytorch.org/whl/cpu torch torchvision
 ultralytics>=8.1
 # ROS 2 Jazzy's cv_bridge and message bindings are built against NumPy 1.x
 numpy<2
 # Last OpenCV wheels that still accept NumPy 1.x
 opencv-python<4.12
+# Newer setuptools drops pkg_resources, which supervisor and some ROS tools still import
+setuptools<81
