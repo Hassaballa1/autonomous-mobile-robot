@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>amr_bringup</name>
+  <version>1.0.0</version>
+  <description>Launch files for the real robot on the Raspberry Pi: drivers, perception, SLAM and Nav2.</description>
+  <maintainer email="eslam22habashy@gmail.com">Eslam Habashy</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>amr_base</exec_depend>
+  <exec_depend>amr_description</exec_depend>
+  <exec_depend>amr_perception</exec_depend>
+  <exec_depend>rplidar_ros</exec_depend>
+  <exec_depend>v4l2_camera</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>amr_sim</name>
+  <version>0.2.0</version>
+  <description>Gazebo simulation of the AMR: diff-drive base, 360° lidar and a forward camera, with SLAM and Nav2 launch files.</description>
+  <maintainer email="eslam22habashy@gmail.com">Eslam Habashy</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>nav2_map_server</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>nav2_simple_commander</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
