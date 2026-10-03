@@ -6,6 +6,7 @@ Publishes:   detections (vision_msgs/Detection2DArray), detections/image (annota
 Inference runs in its own thread on the newest frame only, so a slow model on the Pi
 drops frames instead of building up latency.
 """
+import os
 import threading
 import time
 
@@ -22,13 +23,20 @@ class YoloDetector(Node):
 
     def __init__(self):
         super().__init__('yolo_detector')
-        model_path = self.declare_parameter('model', 'yolov8n.pt').value
+        model_path = self.declare_parameter('model', 'yolov8n-oiv7.pt').value
+        model_dir = os.path.expanduser(
+            self.declare_parameter('model_dir', '~/.cache/amr_perception').value)
         self.confidence = self.declare_parameter('confidence', 0.4).value
         self.image_size = self.declare_parameter('image_size', 320).value
         self.device = self.declare_parameter('device', 'cpu').value
         self.max_rate = self.declare_parameter('max_rate_hz', 5.0).value
         self.publish_annotated = self.declare_parameter('publish_annotated', True).value
 
+        # A bare model name is kept in model_dir, so it is downloaded once and found again
+        # regardless of the working directory the node was started from (e.g. systemd)
+        if not os.path.dirname(model_path):
+            os.makedirs(model_dir, exist_ok=True)
+            model_path = os.path.join(model_dir, model_path)
         self.get_logger().info(f'Loading model {model_path}')
         self.model = YOLO(model_path, task='detect')
         self.bridge = CvBridge()

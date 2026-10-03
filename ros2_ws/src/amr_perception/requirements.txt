@@ -1,1 +1,5 @@
 ultralytics>=8.1
+# ROS 2 Jazzy's cv_bridge and message bindings are built against NumPy 1.x
+numpy<2
+# Last OpenCV wheels that still accept NumPy 1.x
+opencv-python<4.12

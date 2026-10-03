@@ -21,7 +21,7 @@ class HazardGuard(Node):
     def __init__(self):
         super().__init__('hazard_guard')
         self.hazard_classes = set(self.declare_parameter(
-            'hazard_classes', ['stairs', 'drop']).value)
+            'hazard_classes', ['Stairs', 'Drop']).value)
         self.min_score = self.declare_parameter('min_score', 0.5).value
         self.image_height = self.declare_parameter('image_height', 480).value
         self.near_fraction = self.declare_parameter('near_fraction', 0.55).value

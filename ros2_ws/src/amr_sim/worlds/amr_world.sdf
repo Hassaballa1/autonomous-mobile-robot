@@ -13,6 +13,13 @@
       <render_engine>ogre2</render_engine>
     </plugin>
 
+    <!-- Indoor-style lighting: strong ambient so surfaces facing away from the sun aren't black -->
+    <scene>
+      <ambient>0.7 0.7 0.7 1</ambient>
+      <background>0.85 0.85 0.85 1</background>
+      <shadows>true</shadows>
+    </scene>
+
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
       <pose>0 0 10 0 0 0</pose>
@@ -94,25 +101,67 @@
       </link>
     </model>
 
-    <!-- The robot: 80 x 45 cm frame, 15 cm drive wheels on the centre axle (30 cm apart),
-         four corner casters, lidar in the centre. Matches amr_description/urdf/amr.urdf.xacro. -->
+    <!-- Staircase against the south wall. The first step (15 cm) is below the lidar's
+         scan plane (17.5 cm), so only the camera and YOLOv8 can see it coming. -->
+    <model name="stairs">
+      <static>true</static>
+      <link name="link">
+        <collision name="step0_c"><pose>0 -2.350 0.075 0 0 0</pose><geometry><box><size>1.2 0.3 0.150</size></box></geometry></collision>
+        <visual name="step0_riser"><pose>0 -2.350 0.065 0 0 0</pose><geometry><box><size>1.2 0.3 0.130</size></box></geometry><material><ambient>0.9 0.9 0.86 1</ambient><diffuse>0.9 0.9 0.86 1</diffuse></material></visual>
+        <visual name="step0_tread"><pose>0 -2.335 0.140 0 0 0</pose><geometry><box><size>1.22 0.330 0.02</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <collision name="step1_c"><pose>0 -2.650 0.150 0 0 0</pose><geometry><box><size>1.2 0.3 0.300</size></box></geometry></collision>
+        <visual name="step1_riser"><pose>0 -2.650 0.140 0 0 0</pose><geometry><box><size>1.2 0.3 0.280</size></box></geometry><material><ambient>0.9 0.9 0.86 1</ambient><diffuse>0.9 0.9 0.86 1</diffuse></material></visual>
+        <visual name="step1_tread"><pose>0 -2.635 0.290 0 0 0</pose><geometry><box><size>1.22 0.330 0.02</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <collision name="step2_c"><pose>0 -2.950 0.225 0 0 0</pose><geometry><box><size>1.2 0.3 0.450</size></box></geometry></collision>
+        <visual name="step2_riser"><pose>0 -2.950 0.215 0 0 0</pose><geometry><box><size>1.2 0.3 0.430</size></box></geometry><material><ambient>0.9 0.9 0.86 1</ambient><diffuse>0.9 0.9 0.86 1</diffuse></material></visual>
+        <visual name="step2_tread"><pose>0 -2.935 0.440 0 0 0</pose><geometry><box><size>1.22 0.330 0.02</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <collision name="step3_c"><pose>0 -3.250 0.300 0 0 0</pose><geometry><box><size>1.2 0.3 0.600</size></box></geometry></collision>
+        <visual name="step3_riser"><pose>0 -3.250 0.290 0 0 0</pose><geometry><box><size>1.2 0.3 0.580</size></box></geometry><material><ambient>0.9 0.9 0.86 1</ambient><diffuse>0.9 0.9 0.86 1</diffuse></material></visual>
+        <visual name="step3_tread"><pose>0 -3.235 0.590 0 0 0</pose><geometry><box><size>1.22 0.330 0.02</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <collision name="step4_c"><pose>0 -3.550 0.375 0 0 0</pose><geometry><box><size>1.2 0.3 0.750</size></box></geometry></collision>
+        <visual name="step4_riser"><pose>0 -3.550 0.365 0 0 0</pose><geometry><box><size>1.2 0.3 0.730</size></box></geometry><material><ambient>0.9 0.9 0.86 1</ambient><diffuse>0.9 0.9 0.86 1</diffuse></material></visual>
+        <visual name="step4_tread"><pose>0 -3.535 0.740 0 0 0</pose><geometry><box><size>1.22 0.330 0.02</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <collision name="step5_c"><pose>0 -3.850 0.450 0 0 0</pose><geometry><box><size>1.2 0.3 0.900</size></box></geometry></collision>
+        <visual name="step5_riser"><pose>0 -3.850 0.440 0 0 0</pose><geometry><box><size>1.2 0.3 0.880</size></box></geometry><material><ambient>0.9 0.9 0.86 1</ambient><diffuse>0.9 0.9 0.86 1</diffuse></material></visual>
+        <visual name="step5_tread"><pose>0 -3.835 0.890 0 0 0</pose><geometry><box><size>1.22 0.330 0.02</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <visual name="post_l0"><pose>0.630 -2.300 0.600 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_l1"><pose>0.630 -2.600 0.750 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_l2"><pose>0.630 -2.900 0.900 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_l3"><pose>0.630 -3.200 1.050 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_l4"><pose>0.630 -3.500 1.200 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_l5"><pose>0.630 -3.800 1.350 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="rail_l"><pose>0.630 -3.050 1.425 -0.4636 0 0</pose><geometry><box><size>0.04 1.977 0.04</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+        <visual name="post_r0"><pose>-0.630 -2.300 0.600 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_r1"><pose>-0.630 -2.600 0.750 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_r2"><pose>-0.630 -2.900 0.900 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_r3"><pose>-0.630 -3.200 1.050 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_r4"><pose>-0.630 -3.500 1.200 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="post_r5"><pose>-0.630 -3.800 1.350 0 0 0</pose><geometry><cylinder><radius>0.015</radius><length>0.9</length></cylinder></geometry><material><ambient>0.25 0.25 0.28 1</ambient><diffuse>0.25 0.25 0.28 1</diffuse></material></visual>
+        <visual name="rail_r"><pose>-0.630 -3.050 1.425 -0.4636 0 0</pose><geometry><box><size>0.04 1.977 0.04</size></box></geometry><material><ambient>0.55 0.38 0.22 1</ambient><diffuse>0.55 0.38 0.22 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- The robot: 80 x 45 cm frame, 15 cm drive wheels (30 cm apart) 20 cm from the rear,
+         two front casters, lidar in the centre of the frame. base_link is the drive-axle midpoint.
+         Matches amr_description/urdf/amr.urdf.xacro. -->
     <model name="amr">
-      <!-- base_link sits on the drive axle, one wheel radius above the floor -->
+      <!-- base_link sits on the drive axle, one wheel radius above the floor; the frame centre is 0.2 m ahead of it -->
       <pose>0 0 0.075 0 0 0</pose>
 
       <link name="base_link">
         <inertial>
+          <pose>0.2 0 0 0 0 0</pose>
           <mass>8.0</mass>
           <inertia><ixx>0.137</ixx><iyy>0.428</iyy><izz>0.562</izz></inertia>
         </inertial>
-        <collision name="c"><geometry><box><size>0.8 0.45 0.05</size></box></geometry></collision>
-        <visual name="v"><geometry><box><size>0.8 0.45 0.05</size></box></geometry>
+        <collision name="c"><pose>0.2 0 0 0 0 0</pose><geometry><box><size>0.8 0.45 0.05</size></box></geometry></collision>
+        <visual name="v"><pose>0.2 0 0 0 0 0</pose><geometry><box><size>0.8 0.45 0.05</size></box></geometry>
           <material><ambient>0.12 0.12 0.12 1</ambient><diffuse>0.12 0.12 0.12 1</diffuse></material></visual>
-        <visual name="deck"><pose>0 0 0.17 0 0 0</pose><geometry><box><size>0.8 0.5 0.01</size></box></geometry>
+        <visual name="deck"><pose>0.2 0 0.17 0 0 0</pose><geometry><box><size>0.8 0.5 0.01</size></box></geometry>
           <material><ambient>0.2 0.2 0.22 1</ambient><diffuse>0.2 0.2 0.22 1</diffuse></material></visual>
         <!-- Forward-facing camera for the YOLOv8 hazard detector -->
         <sensor name="camera" type="camera">
-          <pose>0.4 0 0.05 0 0.35 0</pose>
+          <pose>0.6 0 0.17 0 0.12 0</pose>
           <topic>camera/image_raw</topic>
           <gz_frame_id>camera_link</gz_frame_id>
           <update_rate>15</update_rate>
@@ -149,7 +198,7 @@
       </joint>
 
       <link name="front_left_caster">
-        <pose>0.35 0.18 -0.0375 0 0 0</pose>
+        <pose>0.55 0.18 -0.0375 0 0 0</pose>
         <inertial><mass>0.1</mass><inertia><ixx>0.00006</ixx><iyy>0.00006</iyy><izz>0.00006</izz></inertia></inertial>
         <collision name="c">
           <geometry><sphere><radius>0.0375</radius></sphere></geometry>
@@ -160,7 +209,7 @@
       </link>
       <joint name="front_left_caster_joint" type="fixed"><parent>base_link</parent><child>front_left_caster</child></joint>
       <link name="front_right_caster">
-        <pose>0.35 -0.18 -0.0375 0 0 0</pose>
+        <pose>0.55 -0.18 -0.0375 0 0 0</pose>
         <inertial><mass>0.1</mass><inertia><ixx>0.00006</ixx><iyy>0.00006</iyy><izz>0.00006</izz></inertia></inertial>
         <collision name="c">
           <geometry><sphere><radius>0.0375</radius></sphere></geometry>
@@ -170,31 +219,9 @@
           <material><ambient>0.95 0.45 0.1 1</ambient><diffuse>0.95 0.45 0.1 1</diffuse></material></visual>
       </link>
       <joint name="front_right_caster_joint" type="fixed"><parent>base_link</parent><child>front_right_caster</child></joint>
-      <link name="rear_left_caster">
-        <pose>-0.35 0.18 -0.0375 0 0 0</pose>
-        <inertial><mass>0.1</mass><inertia><ixx>0.00006</ixx><iyy>0.00006</iyy><izz>0.00006</izz></inertia></inertial>
-        <collision name="c">
-          <geometry><sphere><radius>0.0375</radius></sphere></geometry>
-          <surface><friction><ode><mu>0</mu><mu2>0</mu2></ode></friction></surface>
-        </collision>
-        <visual name="v"><geometry><sphere><radius>0.0375</radius></sphere></geometry>
-          <material><ambient>0.95 0.45 0.1 1</ambient><diffuse>0.95 0.45 0.1 1</diffuse></material></visual>
-      </link>
-      <joint name="rear_left_caster_joint" type="fixed"><parent>base_link</parent><child>rear_left_caster</child></joint>
-      <link name="rear_right_caster">
-        <pose>-0.35 -0.18 -0.0375 0 0 0</pose>
-        <inertial><mass>0.1</mass><inertia><ixx>0.00006</ixx><iyy>0.00006</iyy><izz>0.00006</izz></inertia></inertial>
-        <collision name="c">
-          <geometry><sphere><radius>0.0375</radius></sphere></geometry>
-          <surface><friction><ode><mu>0</mu><mu2>0</mu2></ode></friction></surface>
-        </collision>
-        <visual name="v"><geometry><sphere><radius>0.0375</radius></sphere></geometry>
-          <material><ambient>0.95 0.45 0.1 1</ambient><diffuse>0.95 0.45 0.1 1</diffuse></material></visual>
-      </link>
-      <joint name="rear_right_caster_joint" type="fixed"><parent>base_link</parent><child>rear_right_caster</child></joint>
 
       <link name="lidar_link">
-        <pose>0 0 0.10 0 0 0</pose>
+        <pose>0.2 0 0.10 0 0 0</pose>
         <inertial>
           <mass>0.2</mass>
           <inertia><ixx>0.0001</ixx><iyy>0.0001</iyy><izz>0.0001</izz></inertia>

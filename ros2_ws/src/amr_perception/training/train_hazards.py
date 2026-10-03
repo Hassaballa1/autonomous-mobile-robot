@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fine-tune YOLOv8n on the stairs / drop-off dataset and export it for the Raspberry Pi.
+"""Fine-tune YOLOv8n on stairs and drop-offs and export it for the Raspberry Pi.
 
   pip install ultralytics
   python3 train_hazards.py --data hazards.yaml --epochs 100
@@ -20,7 +20,7 @@ def main():
     parser.add_argument('--device', default=None, help='e.g. 0 for the first GPU, cpu, mps')
     args = parser.parse_args()
 
-    model = YOLO('yolov8n.pt')  # start from COCO weights
+    model = YOLO('yolov8n-oiv7.pt')  # start from the Open Images weights, which know Stairs
     model.train(data=args.data, epochs=args.epochs, imgsz=args.imgsz, device=args.device,
                 project='runs', name='hazards')
     metrics = model.val()
