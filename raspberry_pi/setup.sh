@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-time setup of a Raspberry Pi 4/5 running Ubuntu Server 24.04 (64-bit) for the robot.
-#   git clone https://github.com/Eslamhabashy1/autonomous-mobile-robot.git ~/amr
+#   git clone https://github.com/Hassaballa1/autonomous-mobile-robot.git ~/amr
 #   cd ~/amr/raspberry_pi && ./setup.sh
 set -euo pipefail
 

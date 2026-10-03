@@ -2,11 +2,13 @@
 
 A differential-drive indoor robot I built end to end: an 80 × 45 cm aluminium chassis I fabricated myself, 24 V wiper-motor drivetrain, Arduino motor controller, Raspberry Pi running ROS 2 Jazzy, a 360° LiDAR for SLAM and navigation, and an on-device YOLOv8 detector that stops the robot before it drives towards stairs or drop-offs.
 
+*Built in 2025; the code, simulation and documentation were published here in October 2026.*
+
 <p align="center">
   <img src="docs/media/robot.jpg" width="70%" alt="The finished robot with headlights and top deck">
 </p>
 
-[![CI](https://github.com/Eslamhabashy1/autonomous-mobile-robot/actions/workflows/ci.yml/badge.svg)](https://github.com/Eslamhabashy1/autonomous-mobile-robot/actions/workflows/ci.yml)
+[![CI](https://github.com/Hassaballa1/autonomous-mobile-robot/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassaballa1/autonomous-mobile-robot/actions/workflows/ci.yml)
 ![ROS 2 Jazzy](https://img.shields.io/badge/ROS%202-Jazzy-22314E?logo=ros)
 ![Nav2](https://img.shields.io/badge/Nav2-MPPI-blue)
 ![SLAM Toolbox](https://img.shields.io/badge/SLAM-Toolbox-green)
@@ -34,9 +36,24 @@ A differential-drive indoor robot I built end to end: an 80 × 45 cm aluminium c
 
 ## Build
 
-| Fabricating the frame | Drivetrain installed | First LiDAR bring-up |
-|---|---|---|
-| ![Bare aluminium frame with wheels and casters](docs/media/frame_fabrication.jpg) | ![Frame with the two wiper motors mounted](docs/media/frame_motors.jpg) | ![Painted chassis with the RPLidar in the centre](docs/media/lidar_bringup.jpg) |
+<table>
+  <tr>
+    <th width="50%">LiDAR mapping test (<a href="docs/media/real_robot_lidar.mp4">video</a>)</th>
+    <th width="50%">Fabricating the frame</th>
+  </tr>
+  <tr>
+    <td><a href="docs/media/real_robot_lidar.mp4"><img src="docs/media/lidar_mapping.gif" width="100%" alt="RPLidar spinning on the robot while a live map builds on the laptop"></a></td>
+    <td><img src="docs/media/frame_fabrication.jpg" width="100%" alt="Bare aluminium frame with wheels and casters"></td>
+  </tr>
+  <tr>
+    <th>Drivetrain installed</th>
+    <th>First LiDAR bring-up</th>
+  </tr>
+  <tr>
+    <td><img src="docs/media/frame_motors.jpg" width="100%" alt="Frame with the two wiper motors mounted"></td>
+    <td><img src="docs/media/lidar_bringup.jpg" width="100%" alt="Painted chassis with the RPLidar in the centre"></td>
+  </tr>
+</table>
 
 | Part | Choice |
 |---|---|
@@ -112,7 +129,7 @@ ros2 launch amr_sim sim.launch.py perception:=true   # YOLOv8 on the simulated c
 1. **Flash the Arduino:** see [`firmware/README.md`](firmware/README.md) for wiring, calibration and the serial protocol.
 2. **Set up the Pi** (Ubuntu Server 24.04, 64-bit):
    ```bash
-   git clone https://github.com/Eslamhabashy1/autonomous-mobile-robot.git ~/amr
+   git clone https://github.com/Hassaballa1/autonomous-mobile-robot.git ~/amr
    cd ~/amr/raspberry_pi && ./setup.sh
    ```
    This installs ROS 2 Jazzy and the dependencies, adds udev rules so the LiDAR and the Arduino always appear as `/dev/rplidar` and `/dev/amr_base`, builds the workspace, and enables a systemd service.
