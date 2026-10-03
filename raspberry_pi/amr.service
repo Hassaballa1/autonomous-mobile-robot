@@ -1,0 +1,15 @@
+# Starts the robot stack at boot. Installed by setup.sh, which fills in the user and paths.
+[Unit]
+Description=AMR ROS 2 stack (drivers, perception, SLAM, Nav2)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=__USER__
+Environment=ROS_DOMAIN_ID=7
+ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source __WS__/install/setup.bash && exec ros2 launch amr_bringup nav.launch.py'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

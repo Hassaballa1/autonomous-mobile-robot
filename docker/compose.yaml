@@ -1,0 +1,16 @@
+# docker compose -f docker/compose.yaml up -d --build
+# then open http://localhost:6080 for the desktop
+services:
+  amr:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: amr-dev
+    container_name: amr-dev
+    shm_size: 2gb
+    ports:
+      - "6080:80"     # noVNC desktop
+    environment:
+      - RESOLUTION=1920x1080
+    volumes:
+      - ../ros2_ws:/home/ubuntu/ros2_ws

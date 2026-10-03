@@ -1,0 +1,12 @@
+# Stable device names for the robot's USB serial devices.
+# Install: sudo cp 99-amr.rules /etc/udev/rules.d/ && sudo udevadm control --reload && sudo udevadm trigger
+#
+# Find your own IDs with:  udevadm info -a -n /dev/ttyUSB0 | grep -E 'idVendor|idProduct|serial'
+# If the lidar and the controller use the same USB-serial chip, add ATTRS{serial}=="..." to tell them apart.
+
+# RPLidar A1 (Silicon Labs CP2102)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="rplidar", MODE="0666"
+
+# Motor controller: Arduino Nano clone (CH340) or genuine Nano (FTDI)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="amr_base", MODE="0666"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="amr_base", MODE="0666"
